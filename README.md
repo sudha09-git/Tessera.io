@@ -1,126 +1,122 @@
-# Tessera.io
+# ⚡ Tessera.io: The Collaborative Developer Sandbox
 
-An open-source, AI-native collaborative developer sandbox with real-time CRDT synchronization and secure remote code execution.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?logo=typescript)](https://www.typescriptlang.org/)
 
-## Architecture
+**Tessera.io** is an open-source, real-time collaborative IDE engine. It provides the raw infrastructure needed to build next-generation development tools: zero-latency CRDT document synchronization, a secure remote code execution environment, and an architecture designed natively for AI integration.
 
+Standard cloud IDEs are built for humans. Tessera.io is built for the future: a secure arena where human developers and AI agents can write, test, and debug code together in real time.
+
+---
+
+## 🚀 Current State: The MVP
+
+The current repository is the foundational MVP. We have established the core plumbing to allow real-time collaborative typing and remote code execution. 
+
+*   **Real-Time Collaboration:** Powered by Yjs (CRDTs) and Socket.io, ensuring deterministic, conflict-free state resolution across clients.
+*   **The Editor:** React + TailwindCSS utilizing `@monaco-editor/react` for a native VS Code-like typing experience.
+*   **Secure Execution Engine:** A Node.js worker utilizing BullMQ and the Docker Engine API to run untrusted code safely in isolated, ephemeral containers (with optional gVisor support).
+*   **AI Service Foundation:** A lightweight Python/FastAPI service hooked into the Model Context Protocol (MCP) and MongoDB Atlas Vector Search for RAG pipelines.
+
+---
+
+## 🏗️ Architecture & Monorepo Structure
+
+Tessera.io uses a strict **Turborepo** monorepo via npm workspaces. This modular design allows open-source contributors to work on the exact layer they specialize in without needing to understand the entire stack.
+
+```text
+Tessera.io/
+├── apps/
+│   ├── web/                # React, Vite, Monaco Editor client
+│   ├── sync-server/        # Node.js, Express, Socket.io, Yjs backend
+│   ├── execution-engine/   # Node.js, BullMQ worker, Docker API sandbox
+│   └── ai-service/         # Python, FastAPI microservice
+└── packages/
+    ├── shared-types/       # Common TypeScript definitions and DTOs
+    ├── collaboration/      # Shared CRDT utilities and types
+    └── ui-components/      # Reusable UI component library
 ```
-apps/
-├── web/                 React (Vite) + TailwindCSS + Monaco Editor
-├── sync-server/         Express + Socket.io + Yjs document synchronization
-├── execution-engine/    BullMQ worker + Docker/gVisor sandboxing
-└── ai-service/          Python FastAPI + MCP + MongoDB Atlas Vector Search
 
-packages/
-├── shared-types/        Common TypeScript definitions and DTOs
-├── collaboration/       Yjs CRDT helpers, awareness, Socket.io provider
-└── ui-components/       Reusable UI component stubs
-```
+---
 
-## Prerequisites
+## 🛠️ Local Development Setup
 
-- **Node.js** ≥ 20.0.0 and **npm** ≥ 10.0.0
-- **Docker** (for code execution engine)
-- **Redis** (for BullMQ job queue)
-- **MongoDB** (for AI service RAG storage)
-- **Python** ≥ 3.11 (for AI service)
+### Prerequisites
 
-Optional:
-- **gVisor** (`runsc`) for enhanced kernel isolation in the execution engine
+* **Node.js** ≥ 20.0.0 and **npm** ≥ 10.0.0
+* **Docker** (for the execution engine)
+* **Redis** (for BullMQ task queues)
+* **MongoDB** (for AI service RAG storage)
+* **Python** ≥ 3.11 (for the AI microservice)
 
-## Quick Start
+*Optional:*
+* **gVisor** (`runsc`) for enhanced kernel isolation in the execution engine.
 
+### Quick Start
+
+1. **Clone the repository:**
 ```bash
-# Clone
 git clone git@github.com:Kushaal-k/Tessera.io.git
 cd Tessera.io
+```
 
-# Install all workspace dependencies
+2. **Install all workspace dependencies:**
+```bash
 npm install
+```
 
+3. **Start infrastructure services (Redis & MongoDB):**
+```bash
 # Start Redis (if not already running)
 docker run -d --name tessera-redis -p 6379:6379 redis:7-alpine
 
 # Start MongoDB (if not already running)
 docker run -d --name tessera-mongo -p 27017:27017 mongo:7
+```
 
-# Set up the Python AI service
+4. **Set up the Python AI service:**
+```bash
 cd apps/ai-service
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cd ../..
+```
 
-# Start all services in development mode
+5. **Start all services in development mode:**
+```bash
 npm run dev
 ```
 
-This runs all workspaces concurrently via Turborepo:
-- **Web** → http://localhost:3000
-- **Sync Server** → http://localhost:4000
-- **AI Service** → http://localhost:8000
-- **Execution Engine** → connects to Redis on localhost:6379
+This single command will concurrently spin up the React frontend, the Socket.io sync server, the FastAPI service, and the BullMQ execution worker via Turborepo.
 
-## Available Scripts
 
-From the monorepo root:
+## 🗺️ Roadmap & Future Plans
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start all services in development mode |
-| `npm run build` | Build all TypeScript packages and the web app |
-| `npm run typecheck` | Run TypeScript type checking across all workspaces |
-| `npm run lint` | Run linting across all workspaces |
-| `npm run clean` | Remove all `dist/` and `node_modules/` directories |
+We are actively building out the next phases of Tessera.io. If you are looking to contribute, these are our major upcoming milestones:
 
-## Workspace Dependencies
+### 🎓 Phase 2: The "Socratic Mentor" AI Layer
 
-```
-@tessera/web
-├── @tessera/shared-types
-├── @tessera/collaboration
-└── @tessera/ui-components
+To combat the rise of "vibe coding" (where developers blindly copy-paste AI code), we are building a deeply integrated, learning-focused AI mode.
 
-@tessera/sync-server
-├── @tessera/shared-types
-└── @tessera/collaboration
+* **Interactive Scaffolding:** The AI will refuse to write complete solutions. Instead, it will generate code skeletons with missing logic gates and interactive `// TODO` comments via the CRDT stream.
+* **Live Runtime Interrogation:** When code fails in the Docker sandbox, the AI will intercept the logs and ask the user guiding questions about their variables rather than just printing the fix.
 
-@tessera/execution-engine
-└── @tessera/shared-types
+### 🌐 Phase 3: Integrated WebRTC
 
-@tessera/collaboration
-└── @tessera/shared-types
+* Adding an A/V Selective Forwarding Unit (SFU) to enable seamless audio and video conferencing directly inside the collaborative workspace.
+* Interactive multi-player whiteboard integration synced alongside the Monaco editor.
 
-@tessera/ui-components
-└── @tessera/shared-types
-```
+### 🐙 Phase 4: GitHub Integration
 
-## Environment Variables
+* Native OAuth GitHub app integration to fetch repositories, map file trees, and sync PRs and Issues directly into the workspace.
 
-### Sync Server (`apps/sync-server`)
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `PORT` | `4000` | HTTP/WebSocket server port |
-| `CORS_ORIGIN` | `http://localhost:3000` | Allowed CORS origin |
+---
 
-### Execution Engine (`apps/execution-engine`)
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `REDIS_HOST` | `127.0.0.1` | Redis host |
-| `REDIS_PORT` | `6379` | Redis port |
-| `SANDBOX_RUNTIME` | `runc` | Docker runtime (`runc` or `runsc`) |
-| `WORKER_CONCURRENCY` | `3` | Max concurrent job executions |
+## 🤝 Contributing
 
-### AI Service (`apps/ai-service`)
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `TESSERA_MONGODB_URI` | `mongodb://localhost:27017` | MongoDB connection string |
-| `TESSERA_MONGODB_DB_NAME` | `tessera` | Database name |
-| `TESSERA_MONGODB_COLLECTION` | `code_chunks` | Collection for vector chunks |
-| `TESSERA_EMBEDDING_DIMENSIONS` | `1536` | Embedding vector dimensions |
-| `TESSERA_MCP_SERVER_NAME` | `tessera-ai` | MCP server identifier |
-
-## Contributing
+Tessera.io is an early-stage open-source project, and we are aggressively looking for contributors! Whether you are a React developer, a DevOps engineer (Docker/gVisor), or an AI researcher, there is a place for you here.
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/my-feature`
@@ -128,6 +124,8 @@ From the monorepo root:
 4. Run `npm run typecheck` and `npm run build` from the root
 5. Submit a pull request
 
-## License
+Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us. Look for issues tagged `good first issue` to get your feet wet.
 
-[MIT](LICENSE)
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
