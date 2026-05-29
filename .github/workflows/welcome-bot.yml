@@ -23,3 +23,7 @@ jobs:
             - You've read through our `CONTRIBUTING.md`.
             
             A maintainer will review your code shortly. Happy coding!
+          issue_message: |
+            👋 Welcome to Tessera.io! Thank you for opening your first Issue!
+            
+            Please make sure you have checked out our search tools to see if a similar issue already exists. A maintainer will follow up with you shortly!
