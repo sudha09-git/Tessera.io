@@ -2,6 +2,16 @@
 
 First off, thank you for considering contributing to Tessera.io! It's people like you that make this tool such a great collaborative sandbox.
 
+## Reporting Issues
+
+Before opening a new issue, please search the existing issues to see if the problem or feature request has already been discussed. 
+
+If you find a new bug or have a feature proposal, please open an issue using our interactive templates:
+- **🐛 Bug Reports:** Choose this template to report crashes, unexpected behavior, or security issues. Please include reproduction steps, expected behavior, and system environment info.
+- **💡 Feature Requests:** Choose this template to suggest new features, integrations, or improvements to the collaborative developer sandbox.
+
+---
+
 ## How to Contribute
 
 To ensure a smooth workflow and high code quality, we ask all contributors to follow these steps:
