@@ -23,6 +23,7 @@ export function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const [output, setOutput] = useState<ExecutionResult | null>(null);
+  const [showMinimap, setShowMinimap] = useState(true);
 
   const config = useMemo<SyncConnectionConfig>(
     () => ({
@@ -149,13 +150,36 @@ export function App() {
       {/* Main content */}
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-56 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)] p-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Explorer
-          </p>
-          <div className="mt-3 space-y-1">
-            <div className="rounded px-2 py-1 text-sm font-medium text-tessera-400 bg-tessera-500/10 border border-tessera-500/20">
-              📄 {FILE_NAMES[language]}
+        <aside className="w-56 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)] p-3 flex flex-col justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Explorer
+            </p>
+            <div className="mt-3 space-y-1">
+              <div className="rounded px-2 py-1 text-sm font-medium text-tessera-400 bg-tessera-500/10 border border-tessera-500/20">
+                📄 {FILE_NAMES[language]}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-[var(--color-border)] pt-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
+              Editor Settings
+            </p>
+            <div className="flex items-center justify-between">
+              <label htmlFor="minimap-toggle" className="text-xs font-medium text-slate-300 cursor-pointer select-none">
+                Show Minimap
+              </label>
+              <div className="relative inline-flex items-center">
+                <input
+                  type="checkbox"
+                  id="minimap-toggle"
+                  checked={showMinimap}
+                  onChange={(e) => setShowMinimap(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tessera-600 cursor-pointer"></div>
+              </div>
             </div>
           </div>
         </aside>
@@ -163,7 +187,7 @@ export function App() {
         {/* Editor */}
         <main className="flex-1 overflow-hidden">
           {ytext && awareness ? (
-            <CollaborativeEditor ytext={ytext} awareness={awareness} language={language} />
+            <CollaborativeEditor ytext={ytext} awareness={awareness} language={language} showMinimap={showMinimap} />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-slate-500 font-medium bg-[var(--color-bg)]">
               <svg className="animate-spin h-8 w-8 text-tessera-400" fill="none" viewBox="0 0 24 24">
