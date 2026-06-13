@@ -23,8 +23,9 @@ const LANGUAGE_COMMANDS: Record<
   typescript: (code) => ["node", "--input-type=module", "-e", code],
 
   python: (code) => ["python3", "-c", code],
-  cpp: (code) => ["sh", "-c", `printf '%s' ${JSON.stringify(code)} > /home/user/main.cpp && g++ -o /home/user/main /home/user/main.cpp && /home/user/main`],
-  java: (code) => ["sh", "-c", `printf '%s' ${JSON.stringify(code)} > /home/user/Main.java && javac /home/user/Main.java && java -cp /home/user Main`],
+  cpp: (code) => ["sh", "-c", `printf '%s' ${JSON.stringify(code)} > /tmp/main.cpp && g++ -o /tmp/main /tmp/main.cpp && /tmp/main`],
+  java: (code) => ["sh", "-c", `printf '%s' ${JSON.stringify(code)} > /tmp/Main.java && javac /tmp/Main.java && java -cp /tmp Main`],
+  rust: (code) => ["sh", "-c", `printf '%s' ${JSON.stringify(code)} > /tmp/main.rs && rustc -o /tmp/main /tmp/main.rs && /tmp/main`],
 };
 
 const DEFAULT_MEMORY_LIMIT_MB = 256;
