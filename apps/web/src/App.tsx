@@ -16,6 +16,7 @@ const FILE_NAMES: Record<SupportedLanguage, string> = {
   python: "main.py",
   cpp: "main.cpp",
   java: "Main.java",
+  rust: "main.rs"
 };
 
 export function App() {
@@ -90,6 +91,7 @@ export function App() {
               <option value="python">Python</option>
               <option value="cpp">C++</option>
               <option value="java">Java</option>
+              <option value="rust">Rust</option>
             </select>
           </div>
 
@@ -249,7 +251,7 @@ export function App() {
                 Duration: {output.durationMs}ms
               </span>
               {output.exitCode !== null && (
-                <span className="text-slate-400">
+                <span className={output.exitCode === 0 ? "text-emerald-400" : "text-rose-400"}>
                   Exit Code: {output.exitCode}
                 </span>
               )}
